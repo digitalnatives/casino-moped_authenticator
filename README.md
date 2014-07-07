@@ -1,6 +1,6 @@
 # casino-moped_authenticator
-[![Build Status](https://travis-ci.org/digitalnatives/casino-moped_authenticator.png?branch=master)](https://travis-ci.org/digitalnatives/casino-moped_authenticator)
-[![Coverage Status](https://coveralls.io/repos/digitalnatives/casino-moped_authenticator/badge.png)](https://coveralls.io/r/digitalnatives/casino-moped_authenticator)
+[![Build Status](https://travis-ci.org/digitalnatives/casino-moped_authenticator.svg?branch=master)](https://travis-ci.org/digitalnatives/casino-moped_authenticator)
+[![Coverage Status](https://img.shields.io/coveralls/digitalnatives/casino-moped_authenticator.svg)](https://coveralls.io/r/digitalnatives/casino-moped_authenticator?branch=master)
 
 Provides mechanism to use Moped/Mongoid as an authenticator for [CASino](https://github.com/rbCAS/CASino).
 
