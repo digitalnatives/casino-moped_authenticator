@@ -108,6 +108,30 @@ module CASino
         end
       end
 
+      describe 'extra_attributes' do
+        let(:extra_attributes) {{
+          id: '_id',
+          email: 'mail_address',
+          roles: 'roles',
+          level: 'level',
+        }}
+
+        it 'returns the bson id as a string' do
+          create_user(
+            'test_attributes',
+            '$5$cegeasjoos$vPX5AwDqOTGocGjehr7k1IYp6Kt.U4FmMUa.1l6NrzD', # password: testpassword
+            mail_address: 'mail@example.org',
+            roles: ['admin', 'agent'],
+            level: 26,
+          )
+          data = subject.validate('test_attributes', 'testpassword')
+          expect(data[:extra_attributes][:email]).to eq 'mail@example.org'
+          expect(data[:extra_attributes][:roles]).to eq ['admin', 'agent']
+          expect(data[:extra_attributes][:level]).to eq 26
+          expect(data[:extra_attributes][:id]).to eq user_with_name('test_attributes')['_id'].to_s
+        end
+      end
+
     end
 
     def create_user(username, password, extra = {})
@@ -119,6 +143,10 @@ module CASino
 
     def update_user_pw(username, new_password)
       session[options[:collection]].find(username: username).update(password: new_password)
+    end
+
+    def user_with_name(username)
+      session[options[:collection]].find(username: username).first
     end
 
     def session
