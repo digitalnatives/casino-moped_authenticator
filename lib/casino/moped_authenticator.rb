@@ -43,6 +43,10 @@ class CASino::MopedAuthenticator
 
   def valid_password?(password, password_from_database)
     return false if password_from_database.to_s.strip == ''
+
+    # SHA256 password if enabled
+    password = Digest::SHA256.digest(password) if @options[:additional_digest] && @options[:additional_digest] == 'sha256'
+
     magic = password_from_database.split('$')[1]
     case magic
     when /\A2a?\z/
