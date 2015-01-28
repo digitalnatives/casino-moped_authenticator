@@ -12,17 +12,34 @@ class CASino::MopedAuthenticator
   end
 
   def validate(username, password)
-    return false unless user = collection.find(@options[:username_column] => username).first
-    password_from_database = user[@options[:password_column]]
+    user = collection.find(@options[:username_column] => username).first
+    return false unless user
+
+    username_from_database = get_nested(user, @options[:username_column], true)
+    password_from_database = get_nested(user, @options[:password_column], true)
 
     if valid_password?(password, password_from_database)
-      { username: user[@options[:username_column]], extra_attributes: extra_attributes(user) }
+      { username: username_from_database, extra_attributes: extra_attributes(user) }
     else
       false
     end
   end
 
   private
+
+  def get_nested(item, key_string, first = false)
+    return_item = item.dup
+
+    return return_item unless item.kind_of?(Hash)
+
+    key_string.split('.').each do |key_part|
+      result = return_item[key_part]
+      result = result[0] if result.kind_of?(Array) && first
+      return_item = result
+    end
+
+    return_item
+  end
 
   def valid_password?(password, password_from_database)
     return false if password_from_database.to_s.strip == ''
@@ -52,7 +69,7 @@ class CASino::MopedAuthenticator
 
   def extra_attributes(user)
     extra_attributes_option.each_with_object({}) do |(attribute_name, database_column), attributes|
-      value = user[database_column]
+      value = get_nested(user, database_column)
       value = value.to_s if value.is_a?(Moped::BSON::ObjectId)
       attributes[attribute_name] = value
     end

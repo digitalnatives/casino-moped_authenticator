@@ -17,7 +17,7 @@ To use the Moped authenticator, configure it in your cas.yml:
           pepper: "suffix of the password" # optional
           extra_attributes:
             email: "email_database_column"
-            fullname: "displayname_database_column"
+            fullname: "user_info.full_name"
 
 ## Contributing to casino-moped_authenticator
 
