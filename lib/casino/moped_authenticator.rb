@@ -4,7 +4,6 @@ require 'bcrypt'
 require 'phpass'
 
 class CASino::MopedAuthenticator
-
   # @param [Hash] options
   def initialize(options)
     @options = options
@@ -30,11 +29,11 @@ class CASino::MopedAuthenticator
   def get_nested(item, key_string, first = false)
     return_item = item.dup
 
-    return return_item unless item.kind_of?(Hash)
+    return return_item unless item.is_a?(Hash)
 
     key_string.split('.').each do |key_part|
       result = return_item[key_part]
-      result = result[0] if result.kind_of?(Array) && first
+      result = result[0] if result.is_a?(Array) && first
       return_item = result
     end
 
@@ -68,7 +67,7 @@ class CASino::MopedAuthenticator
   end
 
   def valid_password_with_phpass?(password, password_from_database)
-    Phpass.new().check(password, password_from_database)
+    Phpass.new.check(password, password_from_database)
   end
 
   def extra_attributes(user)
